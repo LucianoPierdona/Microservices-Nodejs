@@ -1,15 +1,36 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const axios = require("axios");
+import express, { Request, Response } from "express";
+import bodyParser from "body-parser";
+import cors from "cors";
+import axios from "axios";
 
 const app = express();
 app.use(bodyParser.json());
 app.use(cors());
 
-const posts = {};
+interface Comment {
+  id: string;
+  content: string;
+  status: string;
+}
 
-const handleEvent = (type, data) => {
+interface Posts {
+  [key: string]: any;
+  id?: string;
+  title?: string;
+  comments?: Comment[];
+}
+
+interface Data {
+  id: string;
+  postId: string;
+  title?: string;
+  content?: string;
+  status?: string;
+}
+
+let posts: Posts = {};
+
+const handleEvent = (type: string, data: Data) => {
   if (type === "PostCreated") {
     const { id, title } = data;
 
@@ -28,7 +49,7 @@ const handleEvent = (type, data) => {
 
     const post = posts[postId];
 
-    const comment = post.comments.find((comment) => {
+    const comment = post.comments.find((comment: Comment) => {
       return comment.id === id;
     });
 
@@ -37,11 +58,11 @@ const handleEvent = (type, data) => {
   }
 };
 
-app.get("/posts", (req, res) => {
+app.get("/posts", (req: Request, res: Response) => {
   return res.send(posts);
 });
 
-app.post("/events", (req, res) => {
+app.post("/events", (req: Request, res: Response) => {
   const { type, data } = req.body;
 
   handleEvent(type, data);
