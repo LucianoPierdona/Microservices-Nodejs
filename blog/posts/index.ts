@@ -1,18 +1,26 @@
-const bodyParser = require("body-parser");
-const express = require("express");
-const { randomBytes } = require("crypto");
-const cors = require("cors");
+import bodyParser from "body-parser";
+import express, { Request, Response } from "express";
+import { randomBytes } from "crypto";
+import cors from "cors";
+import axios from "axios";
+
 const app = express();
-const axios = require("axios");
 app.use(bodyParser.json());
 app.use(cors());
-const posts = {};
 
-app.get("/posts", (req, res) => {
+interface Posts {
+  [key: string]: any;
+  id?: string;
+  title?: string;
+}
+
+const posts: Posts = {};
+
+app.get("/posts", (req: Request, res: Response) => {
   return res.send(posts);
 });
 
-app.post("/posts", async (req, res) => {
+app.post("/posts", async (req: Request, res: Response) => {
   const id = randomBytes(4).toString("hex");
   const { title } = req.body;
 
@@ -29,7 +37,7 @@ app.post("/posts", async (req, res) => {
   return res.status(201).send(posts[id]);
 });
 
-app.post("/events", (req, res) => {
+app.post("/events", (req: Request, res: Response) => {
   console.log("Received event", req.body.type);
 
   return res.send({});
