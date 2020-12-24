@@ -17,10 +17,10 @@ app.get("/posts/:id/comments", (req, res) => {
 app.post("/posts/:id/comments", async (req, res) => {
   const id = randomBytes(4).toString("hex");
   const { content } = req.body;
-
+  const status = "pending";
   const comments = commentsByPostId[req.params.id] || [];
 
-  comments.push({ id, content });
+  comments.push({ id, content, status });
 
   commentsByPostId[req.params.id] = comments;
 
@@ -29,6 +29,7 @@ app.post("/posts/:id/comments", async (req, res) => {
     data: {
       id,
       content,
+      status,
       postId: req.params.id,
     },
   });
