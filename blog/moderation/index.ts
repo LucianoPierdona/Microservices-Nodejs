@@ -1,9 +1,10 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const axios = require("axios");
+import express from "express";
+import bodyParser from "body-parser";
+import axios from "axios";
 
 const app = express();
 app.use(bodyParser.json());
+const port = 4003;
 
 app.post("/events", async (req, res) => {
   const { type, data } = req.body;
@@ -25,6 +26,6 @@ app.post("/events", async (req, res) => {
   return res.send({});
 });
 
-app.listen(4003, () => {
-  console.log("Listening on port 4003");
+app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
 });

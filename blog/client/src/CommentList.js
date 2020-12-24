@@ -14,6 +14,9 @@ const CommentList = ({ comments }) => {
       case "rejected":
         content = "This comment has been rejected";
         break;
+      default:
+        content = "This comment shoudn't be here";
+        break;
     }
 
     return <li key={comment.id}>{content}</li>;

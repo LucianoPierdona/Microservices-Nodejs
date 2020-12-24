@@ -1,12 +1,21 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const axios = require("axios");
+import express, { Request, Response } from "express";
+import bodyParser from "body-parser";
+import axios from "axios";
 
 const app = express();
 app.use(bodyParser.json());
 
-app.post("/events", (req, res) => {
+interface Events {
+  type: string;
+  data: any;
+}
+
+const events: Events[] = [];
+
+app.post("/events", (req: Request, res: Response) => {
   const event = req.body;
+
+  events.push(event);
 
   axios.post("http://localhost:4000/events", event);
   axios.post("http://localhost:4001/events", event);
@@ -14,6 +23,10 @@ app.post("/events", (req, res) => {
   axios.post("http://localhost:4003/events", event);
 
   return res.send({ status: "OK" });
+});
+
+app.get("/events", (req: Request, res: Response) => {
+  return res.send(events);
 });
 
 app.listen(4005, () => {
