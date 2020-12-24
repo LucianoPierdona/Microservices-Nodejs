@@ -1,14 +1,24 @@
-const express = require("express");
-const bodyParser = require("body-parser");
-const { randomBytes } = require("crypto");
-const cors = require("cors");
-const axios = require("axios");
+import express from "express";
+import bodyParser from "body-parser";
+import { randomBytes } from "crypto";
+import cors from "cors";
+import axios from "axios";
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-const commentsByPostId = {};
+interface Comment {
+  id?: string;
+  content?: string;
+  status?: string;
+}
+
+interface CommentsByPostId extends Comment {
+  [key: string]: any;
+}
+
+const commentsByPostId: CommentsByPostId = {};
 
 app.get("/posts/:id/comments", (req, res) => {
   return res.send(commentsByPostId[req.params.id] || []);
@@ -45,7 +55,7 @@ app.post("/events", async (req, res) => {
 
     const comments = commentsByPostId[postId];
 
-    const comment = comments.find((comment) => {
+    const comment = comments.find((comment: Comment) => {
       return comment.id === id;
     });
 
