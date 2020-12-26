@@ -31,7 +31,7 @@ app.post("/posts", (req, res) => __awaiter(void 0, void 0, void 0, function* () 
         id,
         title,
     };
-    yield axios_1.default.post("http://localhost:4005/events", {
+    yield axios_1.default.post("http://event-bus-srv:4005/events", {
         type: "PostCreated",
         data: { id, title },
     });
