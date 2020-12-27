@@ -20,7 +20,7 @@ app.get("/posts", (req: Request, res: Response) => {
   return res.send(posts);
 });
 
-app.post("/posts", async (req: Request, res: Response) => {
+app.post("/posts/create", async (req: Request, res: Response) => {
   const id = randomBytes(4).toString("hex");
   const { title } = req.body;
 
