@@ -24,7 +24,7 @@ const posts = {};
 app.get("/posts", (req, res) => {
     return res.send(posts);
 });
-app.post("/posts", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+app.post("/posts/create", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const id = crypto_1.randomBytes(4).toString("hex");
     const { title } = req.body;
     posts[id] = {
