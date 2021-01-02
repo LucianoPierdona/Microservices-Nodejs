@@ -44,7 +44,7 @@ router.post(
         id: user.id,
         email: user.email,
       },
-      "oakwddos00"
+      process.env.JWT_KEY!
     );
 
     // Store it on the session object
