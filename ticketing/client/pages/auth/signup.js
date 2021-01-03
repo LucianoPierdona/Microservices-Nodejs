@@ -5,20 +5,18 @@ import useRequest from "../../hooks/useRequest";
 export default () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const { doRequest, errors } = useRequest({
+    url: "/api/users/signup",
+    method: "post",
+    body: {
+      email,
+      password,
+    },
+  });
   const onSubmit = async (event) => {
     event.preventDefault();
 
-    try {
-      const response = await axios.post("/api/users/signup", {
-        email,
-        password,
-      });
-
-      console.log(response.data);
-    } catch (err) {
-      setErrors(err.response.data.errors);
-    }
+    doRequest();
   };
 
   return (
@@ -41,6 +39,7 @@ export default () => {
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
+      {errors}
       <button className="btn btn-primary">Sign up</button>
     </form>
   );
