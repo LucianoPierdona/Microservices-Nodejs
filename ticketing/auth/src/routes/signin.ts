@@ -1,18 +1,17 @@
-import express, { Request, Response } from "express";
-import { body } from "express-validator";
-import { User } from "../models/user";
-import { validateRequest } from "../middlewares/validate-request";
-import { BadRequestError } from "../errors/bad-request-error";
-import { Password } from "../services/password";
-import jwt from "jsonwebtoken";
+import express, { Request, Response } from 'express';
+import { body } from 'express-validator';
+import { User } from '../models/user';
+import { validateRequest, BadRequestError } from '@lpjtickets/common';
+import { Password } from '../services/password';
+import jwt from 'jsonwebtoken';
 
 const router = express.Router();
 
 router.post(
-  "/api/users/signin",
+  '/api/users/signin',
   [
-    body("email").isEmail().withMessage("Email must be valid"),
-    body("password").trim().notEmpty().withMessage("You must apply a password"),
+    body('email').isEmail().withMessage('Email must be valid'),
+    body('password').trim().notEmpty().withMessage('You must apply a password'),
   ],
   validateRequest,
   async (req: Request, res: Response) => {
@@ -20,7 +19,7 @@ router.post(
 
     const existingUser = await User.findOne({ email });
     if (!existingUser) {
-      throw new BadRequestError("Invalid credentials");
+      throw new BadRequestError('Invalid credentials');
     }
 
     const passwordMatch = await Password.compare(
@@ -29,7 +28,7 @@ router.post(
     );
 
     if (!passwordMatch) {
-      throw new BadRequestError("Invalid credentials");
+      throw new BadRequestError('Invalid credentials');
     }
 
     const userJwt = jwt.sign(
