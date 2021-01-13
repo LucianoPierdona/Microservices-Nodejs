@@ -20,9 +20,7 @@ spec:
               value: 'mongodb://tickets-mongo-srv:27017/tickets'
             - name: JWT_KEY
               valueFrom:
-                secretKeyRef:
-                  name: jwt-secret
-                  key: JWT_KEY
+              value: 'dowamwdomadawo'
 ---
 apiVersion: v1
 kind: Service
