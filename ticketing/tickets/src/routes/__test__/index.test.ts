@@ -1,7 +1,7 @@
 import request from 'supertest';
 import { app } from '../../app';
 
-const createTicket = () => {
+export const createTicket = () => {
   return request(app).post('/api/tickets').set('Cookie', global.signin()).send({
     title: 'teste',
     price: 20,
