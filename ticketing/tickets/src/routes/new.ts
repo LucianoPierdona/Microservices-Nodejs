@@ -25,7 +25,7 @@ router.post(
     });
     await ticket.save();
 
-    res.sendStatus(201).send(ticket);
+    return res.sendStatus(201).send(ticket);
   }
 );
 

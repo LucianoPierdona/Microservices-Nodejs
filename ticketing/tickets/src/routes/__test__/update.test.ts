@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import { Ticket } from '../../models/ticket';
 import request from 'supertest';
 import { app } from '../../app';
 
@@ -24,16 +25,15 @@ it('returns a 401 if the user is not authenticated', async () => {
     .expect(401);
 });
 it('returns a 401 if the user does not own the ticket', async () => {
-  const response = await request(app)
-    .post(`/api/tickets/`)
-    .set('Cookie', global.signin())
-    .send({
-      title: 'wiaiwd',
-      price: 20,
-    });
+  await request(app).post(`/api/tickets/`).set('Cookie', global.signin()).send({
+    title: 'wiaiwd',
+    price: 20,
+  });
+
+  const response = await Ticket.find({});
 
   await request(app)
-    .put(`/api/tickets/${response.body.id}`)
+    .put(`/api/tickets/${response[0].id}`)
     .set('Cookie', global.signin())
     .send({
       title: 'awidoawio',
