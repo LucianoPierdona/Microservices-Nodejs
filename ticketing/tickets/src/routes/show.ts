@@ -11,7 +11,7 @@ router.get('/api/tickets/:id', async (req: Request, res: Response) => {
     throw new NotFoundError();
   }
 
-  return res.status(200).send(ticket);
+  return res.send(ticket);
 });
 
 export { router as showTicketRouter };
