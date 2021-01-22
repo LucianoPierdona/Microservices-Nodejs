@@ -60,4 +60,26 @@ it('returns a 400 if the user provided a invalid title or price', async () => {
     })
     .expect(400);
 });
-it('updates the ticket provided valid inputs', async () => {});
+it('updates the ticket provided valid inputs', async () => {
+  const cookie = global.signin();
+  await request(app).post(`/api/tickets/`).set('Cookie', cookie).send({
+    title: 'wiaiwd',
+    price: 20,
+  });
+
+  let response = await Ticket.find({});
+
+  await request(app)
+    .put(`/api/tickets/${response[0].id}`)
+    .set('Cookie', cookie)
+    .send({
+      title: 'World hold on',
+      price: 30,
+    })
+    .expect(200);
+
+  response = await Ticket.find({});
+
+  expect(response[0].title).toEqual('World hold on');
+  expect(response[0].price).toEqual(30);
+});
