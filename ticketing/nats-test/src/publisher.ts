@@ -16,6 +16,6 @@ stan.on('connect', () => {
   });
 
   stan.publish('ticket:created', data, () => {
-    console.log('event published');
+    console.log('Event published');
   });
 });
