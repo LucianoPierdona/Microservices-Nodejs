@@ -2,6 +2,7 @@ import { requireAuth, validateRequest } from '@lpjtickets/common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
 import { TicketCreatedPublisher } from 'src/events/publishers/ticket-created-publisher';
+import { natsWrapper } from 'src/nats-wrapper';
 import { Ticket } from '../models/ticket';
 
 const router = express.Router();
@@ -25,7 +26,7 @@ router.post(
       userId: req.currentUser!.id,
     });
     await ticket.save();
-    await new TicketCreatedPublisher(client).publish({
+    await new TicketCreatedPublisher(natsWrapper.client).publish({
       id: ticket.id,
       title: ticket.title,
       price: ticket.price,
