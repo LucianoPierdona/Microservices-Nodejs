@@ -1,8 +1,8 @@
 import { requireAuth, validateRequest } from '@lpjtickets/common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
-import { TicketCreatedPublisher } from 'src/events/publishers/ticket-created-publisher';
-import { natsWrapper } from 'src/nats-wrapper';
+import { TicketCreatedPublisher } from '../events/publishers/ticket-created-publisher';
+import { natsWrapper } from '../nats-wrapper';
 import { Ticket } from '../models/ticket';
 
 const router = express.Router();
