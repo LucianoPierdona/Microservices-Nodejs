@@ -3,10 +3,10 @@ import 'express-async-errors';
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 import { currentUser, errorHandler, NotFoundError } from '@lpjtickets/common';
-import { createTicketRouter } from './routes/new';
-import { showTicketRouter } from './routes/show';
-import { indexTicketRouter } from './routes';
-import { updateTicketRouter } from './routes/update';
+import { newOrdersRouter } from './routes/new';
+import { showOrdersRouter } from './routes/show';
+import { indexOrdersRouter } from './routes';
+import { deleteOrdersRouter } from './routes/delete';
 
 const app = express();
 app.set('trust proxy', true);
@@ -18,10 +18,10 @@ app.use(
   })
 );
 app.use(currentUser);
-app.use(createTicketRouter);
-app.use(showTicketRouter);
-app.use(indexTicketRouter);
-app.use(updateTicketRouter);
+app.use(newOrdersRouter);
+app.use(showOrdersRouter);
+app.use(indexOrdersRouter);
+app.use(deleteOrdersRouter);
 
 app.all('*', async (req, res) => {
   throw new NotFoundError();
