@@ -13,6 +13,8 @@ import { Order } from 'src/models/order';
 
 const router = express.Router();
 
+const EXPIRATION_WINDOW_SECONDS = 15 * 60;
+
 router.post(
   '/api/orders',
   requireAuth,
@@ -31,12 +33,25 @@ router.post(
       throw new NotFoundError();
     }
 
-    const existingOrder = await ticket.isReserved();
+    const isReserved = await ticket.isReserved();
 
-    if (existingOrder) {
+    if (isReserved) {
       throw new BadRequestError('Ticket is already reserved.');
     }
-    return res.send({});
+
+    const expiration = new Date();
+    expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS);
+
+    const order = Order.build({
+      userId: req.currentUser.id,
+      expiresAt: expiration,
+      status: OrderStatus.Created,
+      ticket,
+    });
+
+    await order.save();
+
+    return res.status(201).send(order);
   }
 );
 
