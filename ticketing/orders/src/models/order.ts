@@ -1,5 +1,6 @@
 import mongoose, { mongo } from 'mongoose';
 import { OrderStatus } from '@lpjtickets/common';
+import { TicketDoc } from './ticket';
 
 // An interface that describes the properties that are required to create a new order
 interface OrderAttrs {
