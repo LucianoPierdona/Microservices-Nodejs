@@ -7,8 +7,8 @@ const start = async () => {
     throw new Error('JWT_KEY must be defined');
   }
 
-  if (!process.env.NATS_CLIENT_ID) {
-    throw new Error('NATS_CLIENT_ID must be defined');
+  if (!process.env.NATS_CLUSTER_ID) {
+    throw new Error('NATS_CLUSTER_ID must be defined');
   }
 
   if (!process.env.NATS_URL) {
@@ -21,7 +21,7 @@ const start = async () => {
 
   try {
     await natsWrapper.connect(
-      process.env.NATS_CLIENT_ID,
+      process.env.NATS_CLUSTER_ID,
       'laskf',
       process.env.NATS_URL
     );
