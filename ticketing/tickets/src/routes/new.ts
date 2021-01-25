@@ -1,9 +1,9 @@
-import { requireAuth, validateRequest } from '@lpjtickets/common';
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
+import { requireAuth, validateRequest } from '@lpjtickets/common';
+import { Ticket } from '../models/ticket';
 import { TicketCreatedPublisher } from '../events/publishers/ticket-created-publisher';
 import { natsWrapper } from '../nats-wrapper';
-import { Ticket } from '../models/ticket';
 
 const router = express.Router();
 
@@ -20,7 +20,7 @@ router.post(
   async (req: Request, res: Response) => {
     const { title, price } = req.body;
 
-    const ticket = await Ticket.build({
+    const ticket = Ticket.build({
       title,
       price,
       userId: req.currentUser!.id,
@@ -33,7 +33,7 @@ router.post(
       userId: ticket.userId,
     });
 
-    return res.sendStatus(201).send(ticket);
+    res.status(201).send(ticket);
   }
 );
 

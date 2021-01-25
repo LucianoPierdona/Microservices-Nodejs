@@ -1,5 +1,5 @@
-import { NotFoundError } from '@lpjtickets/common';
 import express, { Request, Response } from 'express';
+import { NotFoundError } from '@lpjtickets/common';
 import { Ticket } from '../models/ticket';
 
 const router = express.Router();
@@ -11,10 +11,7 @@ router.get('/api/tickets/:id', async (req: Request, res: Response) => {
     throw new NotFoundError();
   }
 
-  return res.send({
-    title: ticket.title,
-    price: ticket.price,
-  });
+  res.send(ticket);
 });
 
 export { router as showTicketRouter };
