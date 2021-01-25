@@ -1,7 +1,12 @@
 import express, { Request, Response } from 'express';
-import { requireAuth, validateRequest } from '@lpjtickets/common';
+import {
+  NotFoundError,
+  requireAuth,
+  validateRequest,
+} from '@lpjtickets/common';
 import { body } from 'express-validator';
 import mongoose from 'mongoose';
+import { Ticket } from 'src/models/ticket';
 
 const router = express.Router();
 
@@ -16,6 +21,12 @@ router.post(
       .withMessage('TicketId must be provided'),
   ],
   async (req: Request, res: Response) => {
+    const { ticketId } = req.body;
+
+    const ticket = await Ticket.findById(ticketId);
+    if (!ticket) {
+      throw new NotFoundError();
+    }
     return res.send({});
   }
 );
