@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import { Ticket } from '../../models/ticket';
 import { Order } from '../../models/order';
 import { OrderStatus } from '@lpjtickets/common';
+import { natsWrapper } from '../../nats-wrapper';
 
 it('return an error if the user does not exist', async () => {
   const ticketId = mongoose.Types.ObjectId();
@@ -36,7 +37,7 @@ it('returns an error if the ticket is already reserved', async () => {
     .post('/api/orders')
     .set('Cookie', global.signin())
     .send({ ticketId: ticket.id })
-    .expect(400);
+    .expect(401);
 });
 
 it('successfully reserves a ticket', async () => {
@@ -52,4 +53,21 @@ it('successfully reserves a ticket', async () => {
     .set('Cookie', global.signin())
     .send({ ticketId: ticket.id })
     .expect(201);
+});
+
+it('emits an order created event', async () => {
+  const ticket = Ticket.build({
+    title: 'concert',
+    price: 20,
+  });
+
+  await ticket.save();
+
+  await request(app)
+    .post('/api/orders')
+    .set('Cookie', global.signin())
+    .send({ ticketId: ticket.id })
+    .expect(201);
+
+  expect(natsWrapper.client.publish).toHaveBeenCalled();
 });
