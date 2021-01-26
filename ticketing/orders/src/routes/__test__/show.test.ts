@@ -29,3 +29,29 @@ it('fetches the order', async () => {
 
   expect(fetchedOrder).toEqual(order);
 });
+
+it('returns an error if the user is not the order owner', async () => {
+  let ticket = Ticket.build({
+    price: 20,
+    title: 'Fodase',
+  });
+  await ticket.save();
+
+  const user = global.signin();
+
+  const { body: order } = await request(app)
+    .post('/api/orders')
+    .set('Cookie', user)
+    .send({
+      ticketId: ticket.id,
+    })
+    .expect(201);
+
+  await request(app)
+    .get(`/api/orders/${order.id}`)
+    .set('Cookie', global.signin())
+    .send({
+      ticketId: ticket.id,
+    })
+    .expect(401);
+});
