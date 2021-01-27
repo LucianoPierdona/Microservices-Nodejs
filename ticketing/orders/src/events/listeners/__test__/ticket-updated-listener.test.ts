@@ -29,6 +29,22 @@ const setup = async () => {
   return { listener, data, ticket, msg };
 };
 
-it('finds, updates, and saves a ticket', async () => {});
+it('finds, updates, and saves a ticket', async () => {
+  const { listener, data, ticket, msg } = await setup();
 
-it('acks the message', async () => {});
+  await listener.onMessage(data, msg);
+
+  const updatedTicket = await Ticket.findById(ticket.id);
+
+  expect(updatedTicket.title).toEqual(data.title);
+  expect(updatedTicket.price).toEqual(data.price);
+  expect(updatedTicket.version).toEqual(data.version);
+});
+
+it('acks the message', async () => {
+  const { listener, data, ticket, msg } = await setup();
+
+  await listener.onMessage(data, msg);
+
+  expect(msg.ack).toHaveBeenCalled();
+});
