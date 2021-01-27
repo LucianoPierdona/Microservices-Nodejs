@@ -24,7 +24,7 @@ it('return the ticket if the ticket is found', async () => {
     .expect(200);
 
   expect(ticketReponse.body).toEqual({
-    __v: 0,
+    version: 0,
     id: response.body.id,
     title,
     price,
