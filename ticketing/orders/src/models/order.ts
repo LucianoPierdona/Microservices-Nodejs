@@ -1,6 +1,7 @@
 import mongoose, { mongo } from 'mongoose';
 import { OrderStatus } from '@lpjtickets/common';
 import { TicketDoc } from './ticket';
+import { updateIfCurrentPlugin } from 'mongoose-update-if-current';
 
 // An interface that describes the properties that are required to create a new order
 interface OrderAttrs {
@@ -21,6 +22,7 @@ interface OrderDoc extends mongoose.Document {
   status: OrderStatus;
   expiresAt: Date;
   ticket: TicketDoc;
+  version: number;
 }
 
 const orderSchema = new mongoose.Schema(
@@ -52,6 +54,9 @@ const orderSchema = new mongoose.Schema(
     },
   }
 );
+
+orderSchema.set('versionKey', 'version');
+orderSchema.plugin(updateIfCurrentPlugin);
 
 orderSchema.statics.build = (attrs: OrderAttrs) => {
   return new Order(attrs);
