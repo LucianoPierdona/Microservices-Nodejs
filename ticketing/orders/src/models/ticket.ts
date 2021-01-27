@@ -12,7 +12,7 @@ interface TicketAttrs {
 export interface TicketDoc extends mongoose.Document {
   title: string;
   price: number;
-  version: number;
+  version?: number;
   isReserved(): Promise<boolean>;
 }
 
@@ -59,7 +59,7 @@ ticketSchema.statics.findByEvent = (event: { id: string; version: number }) => {
 ticketSchema.statics.build = (attrs: TicketAttrs) => {
   return new Ticket({
     _id: attrs.id,
-    title: attrs.price,
+    title: attrs.title,
     price: attrs.price,
   });
 };
