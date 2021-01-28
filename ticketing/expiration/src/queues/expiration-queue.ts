@@ -16,3 +16,5 @@ expirationQueue.process(async (job) => {
     job.data.orderId
   );
 });
+
+export { expirationQueue };
