@@ -6,6 +6,8 @@ import {
 } from '@lpjtickets/common';
 import { Message } from 'node-nats-streaming';
 import { Order } from '../../models/order';
+import { natsWrapper } from '../../nats-wrapper';
+import { OrderCancelledPublisher } from '../publishers/order-cancelled-publisher';
 import { queueGroupName } from './queue-group-name';
 
 export class ExpirationCompleteListener extends Listener<ExpirationCompleteEvent> {
@@ -20,7 +22,18 @@ export class ExpirationCompleteListener extends Listener<ExpirationCompleteEvent
     }
     order.set({
       status: OrderStatus.Cancelled,
-      ticket: null,
     });
+
+    await order.save();
+
+    await new OrderCancelledPublisher(this.client).publish({
+      id: order.id,
+      version: order.version,
+      ticket: {
+        id: order.ticket.id,
+      },
+    });
+
+    msg.ack();
   }
 }
