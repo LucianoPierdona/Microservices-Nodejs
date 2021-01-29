@@ -24,8 +24,6 @@ const paymentSchema = new mongoose.Schema(
     stripeId: {
       type: String,
       required: true,
-      enum: Object.values(OrderStatus),
-      default: OrderStatus.Created,
     },
   },
   {
