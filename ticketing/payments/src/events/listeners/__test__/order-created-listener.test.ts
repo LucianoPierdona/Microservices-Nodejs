@@ -12,7 +12,7 @@ const setup = async () => {
     id: new mongoose.Types.ObjectId().toHexString(),
     version: 0,
     status: OrderStatus.Created,
-    userId: 'dadwkdo',
+    userId: new mongoose.Types.ObjectId().toHexString(),
     expiresAt: 'dowdwodk',
     ticket: {
       id: new mongoose.Types.ObjectId().toHexString(),
